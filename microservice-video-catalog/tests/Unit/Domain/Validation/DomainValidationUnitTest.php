@@ -17,8 +17,9 @@ final class DomainValidationUnitTest extends TestCase
 
     public function testNotNullCustomMessageException()
     {
-        $this->expectException(EntityValidationException::class);
         $exceptionMessage = 'Value should not be null';
+        $this->expectException(EntityValidationException::class);
+        $this->expectExceptionMessage($exceptionMessage);
 
         DomainValidation::notNull('', $exceptionMessage);
     }
