@@ -40,4 +40,21 @@ final class DomainValidationUnitTest extends TestCase
 
         DomainValidation::stringMaxLength('abcdefgh', $maxLength, $exceptionMessage);
     }
+
+    public function testStringMinLength()
+    {
+        $this->expectException(EntityValidationException::class);
+
+        DomainValidation::stringMinLength('ab', 3);
+    }
+
+    public function testStringMinLengthCustomMessageException()
+    {
+        $minLength = 6;
+        $exceptionMessage = "Value should be lower than $minLength";
+        $this->expectException(EntityValidationException::class);
+        $this->expectExceptionMessage($exceptionMessage);
+
+        DomainValidation::stringminLength('abcd', $minLength, $exceptionMessage);
+    }
 }

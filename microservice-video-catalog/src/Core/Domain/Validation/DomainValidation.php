@@ -19,4 +19,11 @@ class DomainValidation
             throw new EntityValidationException($exceptionMessage ?? "Value should be lower than $maxLength");
         }
     }
+
+    public static function stringMinLength(string $value, int $minLength, ?string $exceptionMessage = null)
+    {
+        if (strlen($value) < $minLength) {
+            throw new EntityValidationException($exceptionMessage ?? "Value should be greater than $minLength");
+        }
+    }
 }
