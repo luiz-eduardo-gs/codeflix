@@ -3,6 +3,7 @@
 namespace Core\Domain\Entity;
 
 use Core\Domain\Entity\Trait\MagicMethodsTrait;
+use Core\Domain\Exception\EntityValidationException;
 
 class Category
 {
@@ -18,6 +19,7 @@ class Category
         $this->name = $name;
         $this->description = $description;
         $this->isActive = $isActive;
+        $this->validate();
     }
 
     public function activate(): void
@@ -36,6 +38,20 @@ class Category
         
         if ($description !== '') {
             $this->description = $description;
+        }
+
+        $this->validate();
+    }
+
+    private function validate()
+    {
+        if (strlen($this->name) <= 3) {
+            throw new EntityValidationException("Category name should have at least 3 characters");
+        }
+
+        if (
+            $this->description !== '' && (strlen($this->description) <= 3 || strlen($this->description) > 255)) {
+            throw new EntityValidationException("Category description should have at least 3 characters");
         }
     }
 }

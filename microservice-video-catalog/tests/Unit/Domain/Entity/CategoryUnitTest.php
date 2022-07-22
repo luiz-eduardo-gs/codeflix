@@ -3,11 +3,12 @@
 namespace Tests\Unit\Domain\Entity;
 
 use Core\Domain\Entity\Category;
+use Core\Domain\Exception\EntityValidationException;
 use PHPUnit\Framework\TestCase;
 
 final class CategoryUnitTest extends TestCase
 {
-    public function testAttributes(): void
+    public function testAttributes()
     {
         $category = new Category(
             name: 'Category',
@@ -20,7 +21,7 @@ final class CategoryUnitTest extends TestCase
         $this->assertEquals(true, $category->isActive);
     }
 
-    public function testActivated(): void
+    public function testActivated()
     {
         $category = new Category(
             name: 'Category',
@@ -32,7 +33,7 @@ final class CategoryUnitTest extends TestCase
         $this->assertTrue($category->isActive);
     }
 
-    public function testDeactivated(): void
+    public function testDeactivated()
     {
         $category = new Category(
             name: 'Category',
@@ -46,7 +47,7 @@ final class CategoryUnitTest extends TestCase
         $this->assertFalse($category->isActive);
     }
 
-    public function testUpdate(): void
+    public function testUpdate()
     {
         $uuid = 'uuid.value';
 
@@ -81,5 +82,28 @@ final class CategoryUnitTest extends TestCase
 
         $this->assertEquals('updated_category', $category->name);
         $this->assertEquals('Desc', $category->description);
+    }
+
+    public function testNameValidation()
+    {
+        $this->expectException(EntityValidationException::class);
+
+        $category = new Category(
+            name: '',
+            description: 'Desc',
+            isActive: true,
+        );
+
+    }
+
+    public function testDescriptionValidation()
+    {
+        $this->expectException(EntityValidationException::class);
+
+        $category = new Category(
+            name: 'Category',
+            description: 'D',
+            isActive: true,
+        );
     }
 }
