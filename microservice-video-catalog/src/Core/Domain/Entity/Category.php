@@ -4,6 +4,7 @@ namespace Core\Domain\Entity;
 
 use Core\Domain\Entity\Trait\MagicMethodsTrait;
 use Core\Domain\Exception\EntityValidationException;
+use Core\Domain\Validation\DomainValidation;
 
 class Category
 {
@@ -45,13 +46,22 @@ class Category
 
     private function validate()
     {
-        if (strlen($this->name) <= 3) {
-            throw new EntityValidationException("Category name should have at least 3 characters");
-        }
+        DomainValidation::stringMinLength(
+            value: $this->name,
+            exceptionMessage: "Category name should have at least 3 characters",
+        );
+        DomainValidation::stringMaxLength(
+            value: $this->name,
+            exceptionMessage: "Category name should have less than 255 characters",
+        );
 
-        if (
-            $this->description !== '' && (strlen($this->description) <= 3 || strlen($this->description) > 255)) {
-            throw new EntityValidationException("Category description should have at least 3 characters");
-        }
+        DomainValidation::stringMinLengthWhenValueNotEmpty(
+            value: $this->description,
+            exceptionMessage: "Category description should have at least 2 characters",
+        );
+        DomainValidation::stringMaxLengthWhenValueNotEmpty(
+            value: $this->description,
+            exceptionMessage: "Category description should have less than 255 characters",
+        );
     }
 }

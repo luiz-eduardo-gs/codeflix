@@ -5,6 +5,7 @@ namespace Tests\Unit\Domain\Validation;
 use Core\Domain\Exception\EntityValidationException;
 use PHPUnit\Framework\TestCase;
 use Core\Domain\Validation\DomainValidation;
+use Exception;
 
 final class DomainValidationUnitTest extends TestCase
 {
@@ -56,5 +57,31 @@ final class DomainValidationUnitTest extends TestCase
         $this->expectExceptionMessage($exceptionMessage);
 
         DomainValidation::stringminLength('abcd', $minLength, $exceptionMessage);
+    }
+
+    public function testStringCanBeNullAndMaxLength()
+    {
+        $this->expectException(EntityValidationException::class);
+
+        DomainValidation::stringMaxLengthWhenValueNotEmpty('abdc', 2);
+    }
+
+    public function testStringCanBeNullAndMaxLengthWithEmptyString()
+    {
+        $this->expectNotToPerformAssertions();
+        DomainValidation::stringMaxLengthWhenValueNotEmpty('', 20);
+    }
+
+    public function testStringCanBeNullAndMinLength()
+    {
+        $this->expectException(EntityValidationException::class);
+
+        DomainValidation::stringMinLengthWhenValueNotEmpty('a', 2);
+    }
+
+    public function testStringCanBeNullAndMinLengthWithEmptyString()
+    {
+        $this->expectNotToPerformAssertions();
+        DomainValidation::stringMinLengthWhenValueNotEmpty('', 20);
     }
 }
