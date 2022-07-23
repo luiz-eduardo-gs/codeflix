@@ -6,23 +6,23 @@ use Core\Domain\Entity\Trait\MagicMethodsTrait;
 use Core\Domain\Exception\EntityValidationException;
 use Core\Domain\Validation\DomainValidation;
 use Core\Domain\ValueObject\Uuid;
+use DateTime;
 
 class Category
 {
     use MagicMethodsTrait;
-    
-    
+
+
     public function __construct(
         protected Uuid|string $id = '',
         protected string $name = '',
         protected string $description = '',
-        protected bool $isActive = true
-    )
-    {
+        protected bool $isActive = true,
+        protected DateTime|string $createdAt = '',
+    ) {
         $this->id = $this->id ? new Uuid($this->id) : Uuid::random();
-        $this->name = $name;
-        $this->description = $description;
-        $this->isActive = $isActive;
+        $this->createdAt = $this->createdAt ? new DateTime($this->createdAt) : new DateTime();
+
         $this->validate();
     }
 
@@ -39,7 +39,7 @@ class Category
     public function update(string $name, string $description = ''): void
     {
         $this->name = $name;
-        
+
         if ($description !== '') {
             $this->description = $description;
         }
