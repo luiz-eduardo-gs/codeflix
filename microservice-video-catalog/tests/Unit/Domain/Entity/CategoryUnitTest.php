@@ -5,6 +5,7 @@ namespace Tests\Unit\Domain\Entity;
 use Core\Domain\Entity\Category;
 use Core\Domain\Exception\EntityValidationException;
 use PHPUnit\Framework\TestCase;
+use Ramsey\Uuid\Uuid;
 
 final class CategoryUnitTest extends TestCase
 {
@@ -16,6 +17,7 @@ final class CategoryUnitTest extends TestCase
             isActive: true,
         );
 
+        $this->assertNotEmpty($category->id);
         $this->assertEquals('Category', $category->name);
         $this->assertEquals('Description', $category->description);
         $this->assertEquals(true, $category->isActive);
@@ -49,7 +51,7 @@ final class CategoryUnitTest extends TestCase
 
     public function testUpdate()
     {
-        $uuid = 'uuid.value';
+        $uuid = Uuid::uuid4()->toString();
 
         $category = new Category(
             id: $uuid,
@@ -69,7 +71,7 @@ final class CategoryUnitTest extends TestCase
 
     public function testUpdateWithoutDescription()
     {
-        $uuid = 'uuid.value';
+        $uuid = Uuid::uuid4()->toString();
 
         $category = new Category(
             id: $uuid,
@@ -88,7 +90,7 @@ final class CategoryUnitTest extends TestCase
     {
         $this->expectException(EntityValidationException::class);
 
-        $category = new Category(
+        new Category(
             name: '',
             description: 'Desc',
             isActive: true,
@@ -100,7 +102,7 @@ final class CategoryUnitTest extends TestCase
     {
         $this->expectException(EntityValidationException::class);
 
-        $category = new Category(
+        new Category(
             name: 'Category',
             description: 'D',
             isActive: true,
