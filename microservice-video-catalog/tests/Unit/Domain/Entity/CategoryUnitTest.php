@@ -65,6 +65,7 @@ final class CategoryUnitTest extends TestCase
             description: 'updated_description'
         );
 
+        $this->assertEquals($uuid, $category->id);
         $this->assertEquals('updated_category', $category->name);
         $this->assertEquals('updated_description', $category->description);
     }
