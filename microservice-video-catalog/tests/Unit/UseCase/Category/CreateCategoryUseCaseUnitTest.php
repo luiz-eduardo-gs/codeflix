@@ -17,7 +17,8 @@ class CreateCategoryUseCaseUnitTest extends TestCase
         //     'category name'
         // ]);
 
-        $this->repositoryMock = Mockery::mock(stdClass::class, CategoryRepositoryInterface::class);
+        /** @var \Mockery\MockInterface|\Mockery\LegacyMockInterface */
+        $this->repositoryMock = Mockery::mock(CategoryRepositoryInterface::class);
         $this->repositoryMock->shouldReceive('insert');
 
         $useCase = new CreateCategoryUseCase($this->repositoryMock);
@@ -28,4 +29,3 @@ class CreateCategoryUseCaseUnitTest extends TestCase
         Mockery::close();
     }
 }
-
