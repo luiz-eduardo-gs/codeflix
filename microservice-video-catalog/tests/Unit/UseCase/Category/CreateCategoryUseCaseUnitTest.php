@@ -17,25 +17,38 @@ class CreateCategoryUseCaseUnitTest extends TestCase
     {
 
         $uuid = (string) Uuid::uuid4()->toString();
+        $categoryName = 'category name';
 
         $this->entityMock = Mockery::mock(Category::class, [
             $uuid,
-            'category name',
+            $categoryName,
         ]);
 
-        /** @var \Mockery\MockInterface|\Mockery\LegacyMockInterface */
         $this->repositoryMock = Mockery::mock(CategoryRepositoryInterface::class);
         $this->repositoryMock->shouldReceive('insert')->andReturn($this->entityMock);
 
         $this->inputDtoMock = Mockery::mock(CreateCategoryInputDto::class, [
-            'category name'
+            $categoryName
         ]);
 
         $useCase = new CreateCategoryUseCase($this->repositoryMock);
         $useCaseResponse = $useCase->execute($this->inputDtoMock);
 
         $this->assertInstanceOf(CreateCategoryOutputDto::class, $useCaseResponse);
+        $this->assertEquals($categoryName, $useCaseResponse->name);
+        $this->assertEquals('', $useCaseResponse->description);
 
+        /**
+         * Spies
+         */
+        $this->spy = Mockery::spy(CategoryRepositoryInterface::class);
+        $this->spy->shouldReceive('insert')->andReturn($this->entityMock);
+
+        $useCase = new CreateCategoryUseCase($this->spy);
+        $useCaseResponse = $useCase->execute($this->inputDtoMock);
+        
+        $this->spy->shouldHaveReceived('insert');
+        
         Mockery::close();
     }
 }
